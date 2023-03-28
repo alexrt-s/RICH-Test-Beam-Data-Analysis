@@ -15,6 +15,11 @@ import scipy
 
 from scipy.optimize import curve_fit
 
+my_cmap = plt.cm.get_cmap('viridis').copy()
+my_cmap.set_under('w')
+plt.rcParams['image.cmap'] = my_cmap
+plt.rcParams["errorbar.capsize"] = 4
+
 path = '/Users/alexthomson-strong/Desktop/Undergraduate Physics/Senior Honours/SHP/ROOT Files/download/'
 
 
@@ -84,7 +89,7 @@ for CH in range(0,32):
     
     #Plotting a 2D histogram of the data before applying any corrections.
     
-    plt.pcolormesh(ToT, ToA, w.T,cmap='Blues')
+    plt.pcolormesh(ToT, ToA, w.T,vmin=1)
     plt.xlabel('ToT')
     plt.ylabel('ToA/ns')
     plt.ylim([-15,15])
@@ -154,7 +159,7 @@ for CH in range(0,32):
     
   
     def polynomial(x,f,a,b,c,d,e,g,h,j):
-        return  a + b * x + c*x**2 + d * x**3  + e *x**4  +  f * np.log(g* x + h)  + j * x**5
+        return  a + b * x + c*x**2 + d * x**3  + e *x**4 + j * x**5
   
     fit,cov = curve_fit(polynomial,
                         ToT_popped,
@@ -228,7 +233,7 @@ for CH in range(0,32):
         indx = indx[0:-1]
         twc[i] = w[i][indx]
         
-    plt.pcolormesh(ToT, ToA, twc.T,cmap='Blues')
+    plt.pcolormesh(ToT, ToA, twc.T,vmin=1)
     plt.xlabel('ToT')
     plt.ylabel('ToA')
     
@@ -281,8 +286,8 @@ for CH in range(0,32):
     plt.savefig(path +'/HV='+str(RT)+'/ch' + str(CH) + '/Frequency vs ToA after TWC with fit')
     plt.close()
     
-    #print('time resolution without the time walk correction is ' + str(fit2[1]))
-    #print('time resolution with the time walk correction is ' + str(fit3[1]))
+    print('time resolution without the time walk correction is ' + str(fit2[1]))
+    print('time resolution with the time walk correction is ' + str(fit3[1]))
     
 
     with open(path +'/HV='+str(RT)+ '/sigma before after.txt','a') as f:
